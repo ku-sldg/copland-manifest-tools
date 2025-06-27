@@ -1,0 +1,31 @@
+# This file was generated from `meta.yml`, please do not edit manually.
+# Follow the instructions on https://github.com/coq-community/templates to regenerate.
+
+opam-version: "2.0"
+maintainer: "30wthomas@ku.edu"
+version: "0.1.0"
+
+homepage: "https://github.com/ku-sldg/copland-manifest-tools"
+dev-repo: "git+https://github.com/ku-sldg/copland-manifest-tools.git"
+bug-reports: "https://github.com/ku-sldg/copland-manifest-tools/issues"
+license: "CC-BY-SA-4.0"
+
+synopsis: "Copland Manifest definitions and tools built in Rocq"
+description: """
+This library provides definitions and tools for working with Copland manifests in Rocq. It includes utilities for validating, generating, and manipulating manifests, as well as providing a framework for building and extending manifest-related functionality."""
+
+build: ["dune" "build" "-p" name "-j" jobs]
+depends: [
+  "ocaml" { >= "4.12~" }
+  "dune" {>= "3.17"}
+  "coq" 
+  "rocq-candy" { >= "0.2.1" }
+  "rocq-copland-spec" { >= "0.1.0" }
+]
+
+tags: [
+  "logpath:copland-manifest-tools"
+]
+authors: [
+  "Will Thomas <30wthomas@ku.edu>"
+]

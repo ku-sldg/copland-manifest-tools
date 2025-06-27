@@ -1,14 +1,14 @@
 ---
 # This file is used to configure the project metadata
-fullname: <Project Name> # This is a full name for the project
-shortname: <Project Short Name> # NOTE: This is the presumed REPOSITORY name
-lib_name: <Project Library Name> # NOTE: This is the name of the library that will be used in the Coq code
-opam_name: <opam-name> # i.e. coq-Base64
-synopsis: "<Project Synopsis>"
-description: "<Project Description>"
+fullname: copland-manifest-tools # This is a full name for the project
+shortname: copland-manifest-tools # NOTE: This is the presumed REPOSITORY name
+lib_name: CoplandManifestTools # NOTE: This is the name of the library that will be used in the Coq code
+opam_name: rocq-copland-manifest-tools # i.e. coq-Base64
+synopsis: "Copland Manifest definitions and tools built in Rocq"
+description: "This library provides definitions and tools for working with Copland manifests in Rocq. It includes utilities for validating, generating, and manipulating manifests, as well as providing a framework for building and extending manifest-related functionality."
 authors:
-  - name: "<Author Name>"
-    email: "<Author Email>"
+  - name: "Will Thomas"
+    email: "30wthomas@ku.edu"
 opam-file-maintainer: "30wthomas@ku.edu" # Need a strong default here or we will accidentally email a Coq developer
 opam-file-version: "0.1.0"
 
@@ -28,6 +28,11 @@ dependencies:
       name: "rocq-candy"
       version: '{ >= "0.2.1" }'
       lib_name: "RocqCandy"
+  - description: "[CoplandSpec](https://github.com/ku-sldg/copland-spec)"
+    opam:
+      name: "rocq-copland-spec"
+      version: '{ >= "0.1.0" }'
+      lib_name: "CoplandSpec"
 coq_trans_deps_workaround: true # Default false if we dont need libraries with transitive dependencies, but if we do, then we need to set this to true
 # This is due to https://github.com/ocaml/dune/issues/11483
 
