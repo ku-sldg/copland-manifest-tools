@@ -140,6 +140,7 @@ Proof.
   unfold aspid_manifest_update, manifest_subset in *;
   intuition; simpl in *; ff; try (erewrite manadd_In_set; ff a, u; fail); eauto;
   ff a, u;
+  try (simpl in *);
   try (eapply IHet in H1; eauto; simpl in *;
   try (erewrite manadd_In_set; ff a, u); eauto);
   try (ateb_unpack Heqr; ff a, u).
