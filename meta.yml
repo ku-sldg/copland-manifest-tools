@@ -33,6 +33,11 @@ dependencies:
       name: "rocq-copland-spec"
       version: '{ >= "0.1.0" }'
       lib_name: "CoplandSpec"
+  - description: "[CLITools](https://github.com/ku-sldg/rocq-cli-tools)"
+    opam:
+      name: "rocq-cli-tools"
+      version: '{ >= "0.1.0" }'
+      lib_name: "CLITools"
 coq_trans_deps_workaround: true # Default false if we dont need libraries with transitive dependencies, but if we do, then we need to set this to true
 # This is due to https://github.com/ocaml/dune/issues/11483
 

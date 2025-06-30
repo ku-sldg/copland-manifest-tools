@@ -24,6 +24,7 @@ This library provides definitions and tools for working with Copland manifests i
 - Additional dependencies:
   - [RocqCandy](https://github.com/ku-sldg/rocq-candy)
   - [CoplandSpec](https://github.com/ku-sldg/copland-spec)
+  - [CLITools](https://github.com/ku-sldg/rocq-cli-tools)
   - [Dune](https://dune.build) 3.17 or later
 - Related publication(s): none
 
