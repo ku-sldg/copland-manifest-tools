@@ -4,6 +4,8 @@ From RocqCandy Require Import All.
 From CoplandSpec Require Import Term_Defs_Core.
 From CoplandManifestTools Require Export Manifest Manifest_Generator Proofs.Manifest_Generator_Helpers.
 
+Global Create HintDb mancomp.
+
 Lemma places'_cumul : forall t p ls,
     In p ls ->
     In p (places' t ls).
