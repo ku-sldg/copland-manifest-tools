@@ -35,7 +35,7 @@ Definition term_arg_spec : arg_spec := {|
 Definition global_context_arg_spec : arg_spec := {|
   arg_name := "global_context";
   arg_kind := ArgOption;
-  arg_required := false;
+  arg_required := true;
   arg_help := "The global context to use for the manifest generation.";
   arg_default := None
 |}.
@@ -63,7 +63,7 @@ Definition write_manifest_to_file (man : Manifest) (filename : string) :=
 Definition write_out_manifests (out_dir : string) (env : EnvironmentM) :=
   let _ := List.map 
     (fun '(p, m) =>
-      let filename := String.append out_dir (String.append "/" (to_string p)) in
+      let filename := String.append out_dir (String.append (String.append "/Manifest_" (to_string p)) ".json") in
       write_manifest_to_file m filename)
     env 
   in tt.

@@ -6,7 +6,29 @@
 (coq.theory
  (name CoplandManifestTools)
  (package rocq-copland-manifest-tools)
- 
- 
+ (theories
+  Stdlib
+  Ltac2
+  RocqCandy
+  RocqJSON
+  CoplandSpec
+  CLITools
+  EasyBakeCakeML)
  (synopsis "Copland Manifest definitions and tools built in Rocq"))
 
+(rule
+ (target manifest_generator)
+ (deps
+  (package rocq-copland-manifest-tools)
+  (universe))
+ (action
+  (run
+   python
+   /home/w732t351/repos/cakeml-build-tools/gen_deps.py
+   --mode
+   build
+   --stubs
+   %{project_root}/../../stubs/
+   --out
+   manifest_generator.cml
+   ../FrontEnd.cml)))
