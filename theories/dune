@@ -19,12 +19,11 @@
 (rule
  (target manifest_generator)
  (deps
-  (package rocq-copland-manifest-tools)
-  (universe))
+  ; NOTE: We depend on the final generated file, after this is dont the build should be ready
+  (file FrontEnd.vo))
  (action
   (run
-   python
-   /home/w732t351/repos/cakeml-build-tools/gen_deps.py
+   bake
    --mode
    build
    --stubs
@@ -32,3 +31,7 @@
    --out
    manifest_generator.cml
    ../FrontEnd.cml)))
+
+(install
+ (section bin)
+ (files manifest_generator))
