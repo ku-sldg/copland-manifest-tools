@@ -23,6 +23,14 @@ opam-file-version: "0.2.0"
 #   - name: "<Keyword2>"
 
 dependencies:
+  - description: "[Ltac2]"
+    opam:
+      lib_name: "Ltac2"
+  - description: "[RocqJSON](https://github.com/ku-sldg/rocq-json)"
+    opam:
+      name: "rocq-json"
+      version: '{ >= "0.2.0" }'
+      lib_name: "RocqJSON"
   - description: "[RocqCandy](https://github.com/ku-sldg/rocq-candy)"
     opam:
       name: "rocq-candy"

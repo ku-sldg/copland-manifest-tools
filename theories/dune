@@ -6,7 +6,7 @@
 (coq.theory
  (name CoplandManifestTools)
  (package rocq-copland-manifest-tools)
- (theories Stdlib RocqCandy CoplandSpec CLITools EasyBakeCakeML)
+ (theories Stdlib Ltac2 RocqJSON RocqCandy CoplandSpec CLITools EasyBakeCakeML)
  
  (synopsis "Copland Manifest definitions and tools built in Rocq"))
 
