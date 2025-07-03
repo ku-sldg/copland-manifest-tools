@@ -19,8 +19,6 @@ depends: [
   "ocaml" { >= "4.12~" }
   "dune" {>= "3.17"}
   "coq" 
-  "" 
-  "rocq-json" { >= "0.2.0" }
   "rocq-candy" { >= "0.2.1" }
   "rocq-copland-spec" { >= "0.1.0" }
   "rocq-cli-tools" { >= "0.1.0" }

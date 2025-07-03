@@ -23,14 +23,6 @@ opam-file-version: "0.2.1"
 #   - name: "<Keyword2>"
 
 dependencies:
-  - description: "[Ltac2]"
-    opam:
-      lib_name: "Ltac2"
-  - description: "[RocqJSON](https://github.com/ku-sldg/rocq-json)"
-    opam:
-      name: "rocq-json"
-      version: '{ >= "0.2.0" }'
-      lib_name: "RocqJSON"
   - description: "[RocqCandy](https://github.com/ku-sldg/rocq-candy)"
     opam:
       name: "rocq-candy"
@@ -51,7 +43,7 @@ dependencies:
       name: "rocq-EasyBakeCakeML"
       version: '{ >= "0.5.0" }'
       lib_name: "EasyBakeCakeML"
-coq_trans_deps_workaround: false # Default false if we dont need libraries with transitive dependencies, but if we do, then we need to set this to true
+coq_trans_deps_workaround: true # Default false if we dont need libraries with transitive dependencies, but if we do, then we need to set this to true
 # This is due to https://github.com/ocaml/dune/issues/11483
 
 ci_extra_repos:

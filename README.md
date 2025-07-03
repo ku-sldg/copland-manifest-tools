@@ -22,8 +22,6 @@ This library provides definitions and tools for working with Copland manifests i
 - Compatible Coq versions: 8.20 later
 - Compatible OCaml versions: 4.12 or later
 - Additional dependencies:
-  - [Ltac2]
-  - [RocqJSON](https://github.com/ku-sldg/rocq-json)
   - [RocqCandy](https://github.com/ku-sldg/rocq-candy)
   - [CoplandSpec](https://github.com/ku-sldg/copland-spec)
   - [CLITools](https://github.com/ku-sldg/rocq-cli-tools)
