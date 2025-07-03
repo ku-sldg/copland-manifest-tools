@@ -6,32 +6,7 @@
 (coq.theory
  (name CoplandManifestTools)
  (package rocq-copland-manifest-tools)
- (theories
-  Stdlib
-  Ltac2
-  RocqCandy
-  RocqJSON
-  CoplandSpec
-  CLITools
-  EasyBakeCakeML)
+ (theories Stdlib RocqCandy CoplandSpec CLITools EasyBakeCakeML)
+ 
  (synopsis "Copland Manifest definitions and tools built in Rocq"))
 
-(rule
- (target manifest_generator)
- (deps
-  ; NOTE: We depend on the final generated file, after this is dont the build should be ready
-  (file FrontEnd.vo))
- (action
-  (run
-   bake
-   --mode
-   build
-   --stubs
-   %{project_root}/../../stubs/
-   --out
-   manifest_generator.cml
-   ../FrontEnd.cml)))
-
-(install
- (section bin)
- (files manifest_generator))
