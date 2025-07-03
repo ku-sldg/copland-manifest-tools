@@ -25,7 +25,8 @@ This library provides definitions and tools for working with Copland manifests i
   - [RocqCandy](https://github.com/ku-sldg/rocq-candy)
   - [CoplandSpec](https://github.com/ku-sldg/copland-spec)
   - [CLITools](https://github.com/ku-sldg/rocq-cli-tools)
-  - [EasyBakeCakeML](https://github.com/durbatuluk1701/EasyBakeCakeML)
+  - [EasyBakeCakeML](https://github.com/Durbatuluk1701/EasyBakeCakeML)
+  - [Bake](https://github.com/Durbatuluk1701/Bake)
   - [Dune](https://dune.build) 3.17 or later
 - Related publication(s): none
 
