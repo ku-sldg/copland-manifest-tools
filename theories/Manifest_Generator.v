@@ -25,7 +25,7 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
       (* let dual_par := asp_paramsC appr_asp_id args targ_plc targ in *)
       match (asp_types G) ![ asp_id ] with
       | None => err err_str_asp_no_type_sig
-      | Some (ev_arrow fwd in_sig out_sig) =>
+      | Some (ev_arrow fwd attrs in_sig out_sig) =>
         match fwd with
         | REPLACE => (* Only need to do the dual ASP *)
           res (aspid_manifest_update appr_asp_id m)
