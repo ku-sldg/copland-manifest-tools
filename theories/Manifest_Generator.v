@@ -25,11 +25,11 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
       (* let dual_par := asp_paramsC appr_asp_id args targ_plc targ in *)
       match (asp_types G) ![ asp_id ] with
       | None => err err_str_asp_no_type_sig
-      | Some (ev_arrow fwd attrs in_sig out_sig) =>
+      | Some (ev_arrow fwd attrs in_sig) =>
         match fwd with
-        | REPLACE => (* Only need to do the dual ASP *)
+        | REPLACE _ => (* Only need to do the dual ASP *)
           res (aspid_manifest_update appr_asp_id m)
-        | WRAP =>
+        | WRAP _ =>
           (* first do the dual ASP to unwrap *)
           (* NOTE: Do we need to be checking that appr_asp_id is an UNWRAP here? *)
           let m' := aspid_manifest_update appr_asp_id m in
@@ -37,21 +37,13 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
         | UNWRAP =>
           (* to appraise an UNWRAP is to appraise whatever is below 
           the UNWRAP and WRAP *)
-          match out_sig with
-          | OutN _ => err err_str_unwrap_must_have_outwrap
-          | OutUnwrap =>
-            m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
-            m'
-          end
+          m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
+          m'
 
-        | EXTEND =>
-          match out_sig with
-          | OutUnwrap => err err_str_extend_must_have_outn
-          | (OutN n) =>
-            (* first we split, left for the appr of extended part, right for rest *)
-            let m' := aspid_manifest_update appr_asp_id m in
-            appr_manifest_update G e' m'
-          end
+        | EXTEND n =>
+          (* first we split, left for the appr of extended part, right for rest *)
+          let m' := aspid_manifest_update appr_asp_id m in
+          appr_manifest_update G e' m'
         end
       end
     end
