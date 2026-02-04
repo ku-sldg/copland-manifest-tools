@@ -99,11 +99,11 @@ Fixpoint manifest_generator' (G : GlobalContext) (p:Plc) (et : EvidenceT)
     et' <- eval G p et t1 ;;
     manifest_generator' G p et' t2 e'
 
-  | bseq _ t1 t2 => 
+  | bseq t1 t2 => 
     e' <- manifest_generator' G p et t1 e ;;
     manifest_generator' G p et t2 e'
 
-  | bpar _ t1 t2 => 
+  | bpar t1 t2 => 
     e' <- manifest_generator' G p et t1 e ;;
     manifest_generator' G p et t2 e'
   end.
