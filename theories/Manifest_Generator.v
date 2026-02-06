@@ -25,7 +25,7 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
       (* let dual_par := asp_paramsC appr_asp_id args targ_plc targ in *)
       match (asp_types G) ![ asp_id ] with
       | None => err err_str_asp_no_type_sig
-      | Some (ev_arrow fwd attrs in_sig) =>
+      | Some (ev_arrow fwd attrs) =>
         match fwd with
         | REPLACE _ => (* Only need to do the dual ASP *)
           res (aspid_manifest_update appr_asp_id m)
@@ -40,7 +40,7 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
           m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
           m'
 
-        | EXTEND n =>
+        | EXTEND n _ =>
           (* first we split, left for the appr of extended part, right for rest *)
           let m' := aspid_manifest_update appr_asp_id m in
           appr_manifest_update G e' m'
