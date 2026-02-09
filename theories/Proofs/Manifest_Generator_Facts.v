@@ -60,8 +60,7 @@ Lemma env_subset_refl : forall e,
   Environment_subset e e.
 Proof.
   intros.
-  unfold Environment_subset; ff;
-  exists m1; split; ff.
+  unfold Environment_subset, manifest_subset; ff.
 Qed.
 
 Lemma env_subset_trans : forall e1 e2 e3,
@@ -71,7 +70,7 @@ Lemma env_subset_trans : forall e1 e2 e3,
 Proof.
   intros.
   unfold Environment_subset in *; intros.
-  specialize H with (m1:= m1) (p:=p); ff a.
+  specialize H with (m1:= m1) (p:=p); ff with a.
   eexists; split; ff.
   eapply manifest_subset_trans; ff.
 Qed.
@@ -81,16 +80,8 @@ Lemma env_subset_set_man : forall e p m1 m2,
   manifest_subset m1 m2 ->
   Environment_subset e (e ![ p := m2 ]).
 Proof.
-  induction e; ff u, a.
-  - unfold Environment_subset; intuition; simpl in *;
-    ff; eauto.
-    exists m0; split; ff.
-  - unfold Environment_subset; intuition; simpl in *;
-    ff; eauto; ff a.
-    * exists m0; split; ff.
-    * destruct (dec_eq p p1); ff a.
-      ** erewrite lookup_insert_eq; eexists; split; ff.
-      ** erewrite lookup_insert_neq; ff l; eexists; split; ff.
+  induction e; ff with u, a;
+  unfold Environment_subset, manifest_subset in *; ff.
 Qed.
 
 Lemma env_subset_set : forall e p m,
@@ -107,10 +98,10 @@ Lemma env_subset_set_none : forall e p m,
   Environment_subset e (e ![ p := m ]).
 Proof.
   intros.
-  unfold Environment_subset; intros.
+  unfold Environment_subset, manifest_subset in *; intros.
   assert (p <> p0) by ff.
-  exists m1; split; ff; eauto with maps.
-  erewrite lookup_insert_neq; ff l.
+  exists m1; split; ff with lia, (eauto with maps).
+  erewrite lookup_insert_neq; ff with l.
 Qed.
 
 Lemma manifest_union_asps_empty_r : forall m,
@@ -135,15 +126,15 @@ Lemma appr_manifest_update_cumul : forall G et m m',
   manifest_subset m m'.
 Proof.
   intros G.
-  induction et using (Evidence_subterm_path_Ind_special G);
-  intros; simpl in *; intuition; ff;
-  unfold aspid_manifest_update, manifest_subset in *;
-  intuition; simpl in *; ff; try (erewrite manadd_In_set; ff a, u; fail); eauto;
-  ff a, u;
-  try (simpl in *);
-  try (eapply IHet in H1; eauto; simpl in *;
-  try (erewrite manadd_In_set; ff a, u); eauto);
-  try (ateb_unpack Heqr; ff a, u).
+  unfold manifest_subset.
+  induction et using (Evidence_subterm_path_Ind_special G); ff;
+
+  unfold aspid_manifest_update, manifest_subset in *; ff;
+  try (erewrite manadd_In_set; ff with a, u; fail);
+
+  try (find_eapply_lem_hyp IHet; ff; erewrite manadd_In_set; ff);
+
+  ff with u, (unpack_atebs).
 Qed.
 
 Lemma manifest_generator_cumul : forall G t et p e1 e2 e',
@@ -153,22 +144,21 @@ Lemma manifest_generator_cumul : forall G t et p e1 e2 e',
 Proof.
   intros.
   generalizeEverythingElse t.
-  induction t; intros; try (ff a, u; eauto; fail).
+  induction t; intros; try (ff with a, u; eauto; fail).
   - (* asp case *)
     ff; eauto; unfold Environment_subset in *; intuition.
     unfold manifest_update_env_res, asp_manifest_update, 
-      aspid_manifest_update in *; ff a, u;
+      aspid_manifest_update in *; ff with a, u;
     try (destruct (dec_eq p p0) > [
         ff; erewrite lookup_insert_eq; eexists; split; ff
         | 
-        ff; erewrite lookup_insert_neq; ff l; eexists; split; ff
+        ff; erewrite lookup_insert_neq; ff with l; eexists; split; ff
     ]);
-    try (unfold manifest_subset in *; ff; erewrite manadd_In_set; ff a, u).
-    pp (appr_manifest_update_cumul _ _ _ _ Heqr);
+    try (unfold manifest_subset in *; ff; erewrite manadd_In_set; ff with a, u).
+    pp (appr_manifest_update_cumul _ _ _ _ Heq);
     eapply manifest_subset_trans; ff.
-  - simpl in *; ff a.
-    eapply IHt >
-    [ eapply env_subset_cons_none; eauto | eauto ].
+  - simpl in *; ff with a, u.
+    eapply IHt > [ eapply env_subset_cons_none; eauto | eauto ].
 Qed.
 
 Lemma manifest_generator_cumul' : forall G t et p e e',
@@ -218,5 +208,5 @@ Lemma lookup_mangen : forall G t et e e' p p' v,
 Proof.
   intros;
   find_eapply_lem_hyp manifest_generator_cumul'; 
-  unfold Environment_subset in *; ff a.
+  unfold Environment_subset in *; ff with a.
 Qed.

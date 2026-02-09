@@ -122,10 +122,10 @@ Lemma manifest_generator_never_empty : forall G t p e et,
   manifest_generator' G p et t e <> res nil.
 Proof.
   induction t; simpl in *; intuition; eauto; 
-  ff a, u.
+  ff with a, u.
   - destruct a; ff;
     unfold manifest_update_env_res, asp_manifest_update in *;
-    ff u;
+    ff with u;
     find_eapply_lem_hyp @insert_not_empty; ff.
 Qed.
 

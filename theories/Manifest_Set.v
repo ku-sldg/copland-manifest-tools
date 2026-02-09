@@ -60,7 +60,7 @@ Lemma manadd_In_set {A : Type} `{HA : DecEq A}: forall (s : manifest_set A) i j,
   In_set i (manset_add j s) <->
   i = j \/ In_set i s.
 Proof.
-  split; induction s; ff a.
+  split; induction s; ff with (fwd).
 Qed.
 
 Lemma in_list_to_set {A : Type} `{HA : DecEq A} : forall (l : list A) a,
@@ -103,10 +103,9 @@ Qed.
 Lemma manset_add_same_dup {A : Type} `{HA : DecEq A} (s : manifest_set A) a :
   manset_add a s = s -> In_set a s /\ ~NoDup (a::s).
 Proof.
-  split; induction s; ff.
-  - invc H0; ff.
-  - eapply IHs; ff.
-    pp (NoDup_remove_1 [a] s a0); ff.
+  split; induction s; ff with (fwd).
+  - invc HC; ff.
+  - pp (NoDup_remove_1 [a] s a0); ff.
 Qed.
 
 Lemma nodup_preserves_manset {A : Type} `{HA : DecEq A} (l : list A) :
@@ -136,7 +135,7 @@ Fixpoint manset_union {A : Type} `{HA : DecEq A} (a b : manifest_set A) : manife
 Lemma manset_add_not_in {A : Type} `{HA : DecEq A} (a : A) (s : manifest_set A) :
   ~In_set a s -> manset_add a s = s ++ [a].
 Proof.
-  intros. induction s; ff r;
+  intros. induction s; ff with r;
   destruct H; ff.
 Qed.
 
