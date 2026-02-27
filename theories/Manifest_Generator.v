@@ -99,13 +99,15 @@ Fixpoint manifest_generator' (G : GlobalContext) (p:Plc) (et : EvidenceT)
     et' <- eval G p et t1 ;;
     manifest_generator' G p et' t2 e'
 
-  | bseq t1 t2 => 
-    e' <- manifest_generator' G p et t1 e ;;
-    manifest_generator' G p et t2 e'
+  | bseq ep t1 t2 => 
+    e' <- manifest_generator' G p (proc_ev_path_left ep et) t1 e ;;
+    e'' <- manifest_generator' G p (proc_ev_path_right ep et) t2 e' ;;
+    res e''
 
-  | bpar t1 t2 => 
-    e' <- manifest_generator' G p et t1 e ;;
-    manifest_generator' G p et t2 e'
+  | bpar ep t1 t2 => 
+    e' <- manifest_generator' G p (proc_ev_path_left ep et) t1 e ;;
+    e'' <- manifest_generator' G p (proc_ev_path_right ep et) t2 e ;;
+    res e''
   end.
 
 Definition manifest_generator_terms (G : GlobalContext) (p:Plc) (ts:list Term) 
