@@ -50,7 +50,7 @@ eapply Build_Jsonifiable with
   (from_JSON := Term_Plc_list_from_JSON).
 unfold Term_Plc_list_from_JSON, Term_Plc_list_to_JSON.
 simpl in *.
-induction a; ff u;
+induction a; ff with u;
 repeat (rewrite canonical_jsonification in *); 
 repeat (rewrite canonical_stringification in *); ff.
 Defined.

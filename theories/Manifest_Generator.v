@@ -18,18 +18,18 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
   | mt_evt => res m
   | nonce_evt _ => res (aspid_manifest_update (check_nonce_aspid) m)
   | asp_evt p par e' => 
-    let '(asp_paramsC asp_id args targ_plc targ) := par in
+    let '(asp_paramsC asp_id args) := par in
     match (asp_comps G) ![ asp_id ] with
     | None => err err_str_asp_no_compat_appr_asp
     | Some appr_asp_id =>
       (* let dual_par := asp_paramsC appr_asp_id args targ_plc targ in *)
       match (asp_types G) ![ asp_id ] with
       | None => err err_str_asp_no_type_sig
-      | Some (ev_arrow fwd in_sig out_sig) =>
+      | Some (ev_arrow fwd attrs) =>
         match fwd with
-        | REPLACE => (* Only need to do the dual ASP *)
+        | REPLACE _ => (* Only need to do the dual ASP *)
           res (aspid_manifest_update appr_asp_id m)
-        | WRAP =>
+        | WRAP _ =>
           (* first do the dual ASP to unwrap *)
           (* NOTE: Do we need to be checking that appr_asp_id is an UNWRAP here? *)
           let m' := aspid_manifest_update appr_asp_id m in
@@ -37,21 +37,13 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
         | UNWRAP =>
           (* to appraise an UNWRAP is to appraise whatever is below 
           the UNWRAP and WRAP *)
-          match out_sig with
-          | OutN _ => err err_str_unwrap_must_have_outwrap
-          | OutUnwrap =>
-            m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
-            m'
-          end
+          m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
+          m'
 
-        | EXTEND =>
-          match out_sig with
-          | OutUnwrap => err err_str_extend_must_have_outn
-          | (OutN n) =>
-            (* first we split, left for the appr of extended part, right for rest *)
-            let m' := aspid_manifest_update appr_asp_id m in
-            appr_manifest_update G e' m'
-          end
+        | EXTEND n _ =>
+          (* first we split, left for the appr of extended part, right for rest *)
+          let m' := aspid_manifest_update appr_asp_id m in
+          appr_manifest_update G e' m'
         end
       end
     end
@@ -69,7 +61,7 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
 Definition asp_manifest_update (G : GlobalContext) (e : EvidenceT) 
     (a:ASP) (m:Manifest) : Result Manifest string :=
   match a with 
-  | ASPC (asp_paramsC i _ _ _) => res (aspid_manifest_update i m)
+  | ASPC (asp_paramsC i _) => res (aspid_manifest_update i m)
   | APPR => appr_manifest_update G e m
   | SIG => res (aspid_manifest_update (sig_aspid) m)
   | HSH => res (aspid_manifest_update (hsh_aspid) m)
@@ -107,13 +99,15 @@ Fixpoint manifest_generator' (G : GlobalContext) (p:Plc) (et : EvidenceT)
     et' <- eval G p et t1 ;;
     manifest_generator' G p et' t2 e'
 
-  | bseq _ t1 t2 => 
-    e' <- manifest_generator' G p et t1 e ;;
-    manifest_generator' G p et t2 e'
+  | bseq ep t1 t2 => 
+    e' <- manifest_generator' G p (proc_ev_path_left ep et) t1 e ;;
+    e'' <- manifest_generator' G p (proc_ev_path_right ep et) t2 e' ;;
+    res e''
 
-  | bpar _ t1 t2 => 
-    e' <- manifest_generator' G p et t1 e ;;
-    manifest_generator' G p et t2 e'
+  | bpar ep t1 t2 => 
+    e' <- manifest_generator' G p (proc_ev_path_left ep et) t1 e ;;
+    e'' <- manifest_generator' G p (proc_ev_path_right ep et) t2 e ;;
+    res e''
   end.
 
 Definition manifest_generator_terms (G : GlobalContext) (p:Plc) (ts:list Term) 
@@ -130,10 +124,10 @@ Lemma manifest_generator_never_empty : forall G t p e et,
   manifest_generator' G p et t e <> res nil.
 Proof.
   induction t; simpl in *; intuition; eauto; 
-  ff a, u.
+  ff with a, u.
   - destruct a; ff;
     unfold manifest_update_env_res, asp_manifest_update in *;
-    ff u;
+    ff with u;
     find_eapply_lem_hyp @insert_not_empty; ff.
 Qed.
 

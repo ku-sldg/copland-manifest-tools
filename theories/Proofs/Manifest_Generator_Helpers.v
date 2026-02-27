@@ -11,8 +11,8 @@ Fixpoint places' (t:Term) (ls:list Plc) : list Plc :=
   | asp _ => ls 
   | att q t' => (q :: (places' t' ls))
   | lseq t1 t2 => places' t2 (places' t1 ls)
-  | bseq _ t1 t2 => places' t2 (places' t1 ls)
-  | bpar _ t1 t2 => places' t2 (places' t1 ls)
+  | bseq ep t1 t2 => places' t2 (places' t1 ls)
+  | bpar ep t1 t2 => places' t2 (places' t1 ls)
   end.
   
 (* places p t -- enumerates places (includes duplicates) discovered in a given 
@@ -27,8 +27,8 @@ Fixpoint places_manset' (t:Term) (ls:manifest_set Plc) : manifest_set Plc :=
   | asp _ => ls 
   | att q t' => (manset_add q (places_manset' t' ls))
   | lseq t1 t2 => places_manset' t2 (places_manset' t1 ls)
-  | bseq _ t1 t2 => places_manset' t2 (places_manset' t1 ls)
-  | bpar _ t1 t2 => places_manset' t2 (places_manset' t1 ls)
+  | bseq ep t1 t2 => places_manset' t2 (places_manset' t1 ls)
+  | bpar ep t1 t2 => places_manset' t2 (places_manset' t1 ls)
   end.
   
 (* places_manset p t -- enumerates places (does NOT add duplicates) discovered in a given 
@@ -70,6 +70,6 @@ Fixpoint place_terms `{DecEq Plc} (t:Term) (tp:Plc) (p:Plc) : list Term :=
     | asp a => []
     | att q t' => place_terms t' q p (* if (eqb_plc p q) then ([t'] ++ (place_terms t' q p)) else (place_terms t' q p) *)
     | lseq t1 t2 => (place_terms t1 tp p) ++ (place_terms t2 tp p)
-    | bseq _ t1 t2 => (place_terms t1 tp p) ++ (place_terms t2 tp p)
-    | bpar _ t1 t2 => (place_terms t1 tp p) ++ (place_terms t2 tp p)
+    | bseq ep t1 t2 => (place_terms t1 tp p) ++ (place_terms t2 tp p)
+    | bpar ep t1 t2 => (place_terms t1 tp p) ++ (place_terms t2 tp p)
     end).

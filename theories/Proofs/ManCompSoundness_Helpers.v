@@ -19,9 +19,7 @@ Lemma app_neq_nil : forall A (ls1 ls2 : list A),
   ls1 ++ ls2 <> [] ->
   (ls1 <> [] \/ ls2 <> []).
 Proof.
-  induction ls2; ff u.
-  - rewrite app_nil_r in *; ff.
-  - right; ff.
+  induction ls2; ff with u.
 Qed.
 
 Lemma places_app_cumul : forall p t ls ls',
@@ -31,8 +29,8 @@ Lemma places_app_cumul : forall p t ls ls',
 Proof.
   intros.
   generalizeEverythingElse t.
-  induction t; ff u, a; intuition; ff;
-  destruct (In_dec dec_eq p (places' t1 ls)); ff a;
+  induction t; ff with u, a; intuition; ff;
+  destruct (In_dec dec_eq p (places' t1 ls)); ff with a;
   eapply places'_cumul; eauto.
 Qed.
 
@@ -49,7 +47,7 @@ Lemma places'_cumul' : forall t p ls,
 Proof.
   intros.
   generalizeEverythingElse t.
-  induction t; ff a, u;
+  induction t; ff with a, u;
   destruct (In_dec dec_eq p (places' t1 [])) > [
     eapply places'_cumul; ff
     |
@@ -63,10 +61,10 @@ Lemma in_plc_term : forall p p0 t,
 Proof.
   intros.
   generalizeEverythingElse t.
-  induction t; ff u, a;
+  induction t; ff with u, a;
   Control.enter (fun () =>
   find_eapply_lem_hyp app_neq_nil;
-  break_or_hyp; ff a; right;
+  break_or_hyp; ff with a; right;
   try (eapply places'_cumul; ff; fail);
   try (eapply places'_cumul'; ff; fail)).
 Qed.

@@ -10,7 +10,7 @@ authors:
   - name: "Will Thomas"
     email: "30wthomas@ku.edu"
 opam-file-maintainer: "30wthomas@ku.edu" # Need a strong default here or we will accidentally email a Coq developer
-opam-file-version: "0.2.4"
+opam-file-version: "0.6.0"
 
 ######################################################
 # NOTE: Optional Extra Info
@@ -26,12 +26,12 @@ dependencies:
   - description: "[RocqCandy](https://github.com/ku-sldg/rocq-candy)"
     opam:
       name: "rocq-candy"
-      version: '{ >= "0.2.1" }'
+      version: '{ >= "0.6.0" }'
       lib_name: "RocqCandy"
   - description: "[CoplandSpec](https://github.com/ku-sldg/copland-spec)"
     opam:
       name: "rocq-copland-spec"
-      version: '{ >= "0.1.0" }'
+      version: '{ >= "0.6.0" }'
       lib_name: "CoplandSpec"
   - description: "[CLITools](https://github.com/ku-sldg/rocq-cli-tools)"
     opam:
