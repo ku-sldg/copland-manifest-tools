@@ -13,6 +13,7 @@
   RocqJSON
   CoplandSpec
   CLITools
+  Equations
   EasyBakeCakeML)
  (synopsis "Copland Manifest definitions and tools built in Rocq"))
 
