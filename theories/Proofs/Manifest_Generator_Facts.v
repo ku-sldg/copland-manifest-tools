@@ -127,14 +127,18 @@ Lemma appr_manifest_update_cumul : forall G et m m',
 Proof.
   intros G.
   unfold manifest_subset.
-  induction et using (Evidence_subterm_path_Ind_special G); ff;
+  induction et; ff;
 
   unfold aspid_manifest_update, manifest_subset in *; ff;
   try (erewrite manadd_In_set; ff with a, u; fail);
 
-  try (find_eapply_lem_hyp IHet; ff; erewrite manadd_In_set; ff);
-
-  ff with u, (unpack_atebs).
+  try (find_eapply_lem_hyp IHet; ff; erewrite manadd_In_set; ff).
+  (* split: chain the two updates *)
+  destruct (appr_manifest_update G et1 m) as [m1 | ] eqn:Hu1 >
+  [ | cbv beta iota delta [bind] in H; inversion H ].
+  cbv beta iota delta [bind] in H.
+  eapply IHet2 > [ exact H | ].
+  eapply IHet1 > [ exact Hu1 | exact H0 ].
 Qed.
 
 Lemma manifest_generator_cumul : forall G t et p e1 e2 e',

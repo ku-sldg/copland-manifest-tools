@@ -35,10 +35,10 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
           let m' := aspid_manifest_update appr_asp_id m in
           appr_manifest_update G e' m'
         | UNWRAP =>
-          (* to appraise an UNWRAP is to appraise whatever is below 
-          the UNWRAP and WRAP *)
-          m' <- (apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_UNWRAP asp_id] e') ;;
-          m'
+          (* The recursion is over the *canonical* evidence form (the APPR
+             entry point normalizes), where every matched WRAP/UNWRAP pair has
+             been cancelled: a surviving UNWRAP head is stuck. *)
+          err err_str_asp_at_bottom_not_wrap
 
         | EXTEND n _ =>
           (* first we split, left for the appr of extended part, right for rest *)
@@ -47,12 +47,9 @@ Fixpoint appr_manifest_update (G : GlobalContext) (e : EvidenceT)
         end
       end
     end
-  | left_evt e' => 
-    res <- apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_LEFT] e' ;;
-    res
-  | right_evt e' => 
-    res <- apply_to_evidence_below G (fun e => appr_manifest_update G e m) [Trail_RIGHT] e' ;;
-    res
+  (* canonical [left_evt]/[right_evt] are stuck projections (cf. UNWRAP) *)
+  | left_evt _ => err err_str_no_evidence_below
+  | right_evt _ => err err_str_no_evidence_below
   | split_evt e1 e2 => 
     m1 <- appr_manifest_update G e1 m ;;
     appr_manifest_update G e2 m1
@@ -62,7 +59,9 @@ Definition asp_manifest_update (G : GlobalContext) (e : EvidenceT)
     (a:ASP) (m:Manifest) : Result Manifest string :=
   match a with 
   | ASPC (asp_paramsC i _) => res (aspid_manifest_update i m)
-  | APPR => appr_manifest_update G e m
+  (* walk the *canonical* form of the appraised evidence, mirroring
+     [appr_procedure] (copland-spec) *)
+  | APPR => appr_manifest_update G (normalize_ev G e) m
   | SIG => res (aspid_manifest_update (sig_aspid) m)
   | HSH => res (aspid_manifest_update (hsh_aspid) m)
   | ENC p => res (aspid_manifest_update (enc_aspid) m)
